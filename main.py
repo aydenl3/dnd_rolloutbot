@@ -45,8 +45,20 @@ class player():
         pass
 
     def Select_attack(self,strategy):
-        #
-        a = 1
+        if(strategy == "burst"):
+            pass
+        if(strategy == "standard"):
+            pass
+        if(strategy == "random"):
+            pass
+        if(strategy == "titfortat"):
+            pass
+        if(strategy == "closest"):
+            pass
+        if(strategy == "preserve"):
+            pass
+        if(strategy == "killer"):
+            pass
     
     def __str__(self):
         return f"Name:{self.name}\nTeam:{self.team}\nHP:{self.curr_hp}/{self.max_hp}\nAC:{self.ac}\nAttacks:\n{(str(self.atklist))}\nBrain:{self.brain}\nStats:{self.stats}\nRole:{self.role}"
@@ -139,7 +151,7 @@ if __name__ == '__main__':
     GrugAtk1 = attackMove("Grug Punch","roll",3,None,"Action",None,None,"Bludgeoning","1d8",None)
     gruglist = [GrugAtk1]
     Grugattacklist = attackList("Grug Attacks",gruglist)
-    Grug = player("Grug",20,15,15,Grugattacklist,2,"aggressive","frontline","player",mydick,[],[],1)
+    Grug = player("Grug",20,15,15,Grugattacklist,2,"burst","frontline","player",mydick,[],[],1)
 
     #print(GrugAtk1)
     #print(Grugattacklist)
