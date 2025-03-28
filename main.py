@@ -1,27 +1,28 @@
 import random
 
 class player():
-    def __init__(self,name,hp,currhp,ac,atklist,initiative,brain,role,team,stats,weaknesses,resistances,inspiration):
-        self.name = name
-        self.max_hp = hp
-        self.curr_hp = currhp
-        self.ac = ac
-        self.atklist = atklist
-        self.initiative = initiative
-        self.brain = brain
-        self.role = role
-        self.team = team
-        self.stats = stats #dictionary of player stats
-        self.weaknesses = weaknesses
-        self.resistances = resistances
-        self.inspiration = inspiration
+    def __init__(self,name,hp,currhp,ac,atklist,initiative,brain,role,team,stats,weaknesses,resistances,inspiration,battlefield):
+        self.name = name                #string
+        self.max_hp = hp                #int
+        self.curr_hp = currhp           #int
+        self.ac = ac                    #int
+        self.atklist = atklist          #attackList of Attacks
+        self.initiative = initiative    #int
+        self.brain = brain              #string
+        self.role = role                #string
+        self.team = team                #string
+        self.stats = stats              #dict of string : int
+        self.weaknesses = weaknesses    #list of strings
+        self.resistances = resistances  #list of strings
+        self.inspiration = inspiration  #int
+        self.battlefield = battlefield  #Battlefield
 
     def Change_hp(self,amt):
         self.curr_hp += amt
         if(self.curr_hp > self.max_hp):
             self.curr_hp = self.max_hp
 
-    def Execute_attack(self,atk,target):
+    def Execute_attack(self,target,atk):
         #Decrement number of attacks
         if atk.num_uses:
             atk.num_uses -= 1
@@ -44,21 +45,51 @@ class player():
         a = 1
         pass
 
-    def Select_attack(self,strategy):
-        if(strategy == "burst"):
-            pass
-        if(strategy == "standard"):
-            pass
-        if(strategy == "random"):
-            pass
-        if(strategy == "titfortat"):
-            pass
-        if(strategy == "closest"):
-            pass
-        if(strategy == "preserve"):
-            pass
-        if(strategy == "killer"):
-            pass
+    def Select_target(self,target_strategy):
+        """
+        Target Strategies:
+
+        killer
+        closest
+        titfortat
+        random
+        preserve
+        """
+
+        if target_strategy == "random":
+            print(f"{self.name} randomly targeted:")
+            if(self.team == "player"):
+                target_number = random.randint(1,len(self.battlefield.team_monsters))
+                target = self.battlefield.team_monsters[target_number-1]
+                attack = self.Select_attack("random",target)
+                print(f"{target.name} with randomly chosen{attack.name}")
+                return(target,attack)
+
+            elif(self.team == "monster"):
+                target_number = random.randint(1,len(self.battlefield.team_players))
+                target = self.battlefield.team_players[target_number-1]
+                attack = self.Select_attack("random",target)
+                print(f"{target.name} with randomly chosen{attack.name}")
+                return(target,attack)
+        pass
+
+    def Select_attack(self,resource_management,target):
+        """
+        Resource Management Styles:        
+        
+        burst
+        standard
+        random
+        conservative
+        mirror
+
+        """
+        if resource_management == "random":
+            attack_number = random.randint(1,len(self.atklist.record))
+            attack = self.atklist.record[attack_number-1]
+
+        return attack
+
     
     def __str__(self):
         return f"Name:{self.name}\nTeam:{self.team}\nHP:{self.curr_hp}/{self.max_hp}\nAC:{self.ac}\nAttacks:\n{(str(self.atklist))}\nBrain:{self.brain}\nStats:{self.stats}\nRole:{self.role}"
@@ -66,6 +97,20 @@ class player():
     def print_attacks(self):
         for attack in self.atklist:
             pass
+
+
+class battlefield():
+    def __init__(self):
+        self.team_monsters = []
+        self.team_players = []
+
+    def add_combatant(self,combatant,team):
+        if team == "player":
+            self.team_players.append(combatant)
+        if team == "monster":
+            self.team_monsters.append(combatant)
+
+
 
 
 class attackMove():
@@ -147,14 +192,25 @@ if __name__ == '__main__':
     mydick.update({"WIS": 2})
     mydick.update({"CHA": 0})
 
+    myBattlefield = battlefield()
 
     GrugAtk1 = attackMove("Grug Punch","roll",3,None,"Action",None,None,"Bludgeoning","1d8",None)
     gruglist = [GrugAtk1]
     Grugattacklist = attackList("Grug Attacks",gruglist)
-    Grug = player("Grug",20,15,15,Grugattacklist,2,"burst","frontline","player",mydick,[],[],1)
+    Grug = player("Grug",20,15,15,Grugattacklist,2,"burst","frontline","player",mydick,[],[],1,myBattlefield)
+    Wolf = player("Wolf",10,10,12,Grugattacklist,5,"burst","rogue","monster",mydick,[],[],0,myBattlefield)
 
     #print(GrugAtk1)
     #print(Grugattacklist)
     print(Grug)
-    Grug.Execute_attack(GrugAtk1,Grug)
+
+    myBattlefield.add_combatant(Grug,"player")
+    myBattlefield.add_combatant(Wolf,"monster")
+    Grug.Execute_attack(Wolf,GrugAtk1)
+
+    (target,attack) = Grug.Select_target("random")
+    Grug.Execute_attack(target,attack)
+
+    (target,attack) = Wolf.Select_target("random")
+    Wolf.Execute_attack(target,attack)
 
