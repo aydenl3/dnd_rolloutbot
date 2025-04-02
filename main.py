@@ -8,6 +8,7 @@ class player():
         self.ac = ac                    #int
         self.atklist = atklist          #attackList of Attacks
         self.initiative = initiative    #int
+        self.rolled_initiative = 0      #int
         self.brain = brain              #string
         self.role = role                #string
         self.team = team                #string
@@ -103,15 +104,30 @@ class battlefield():
     def __init__(self):
         self.team_monsters = []
         self.team_players = []
+        self.initiative_list = []
 
     def add_combatant(self,combatant,team):
         if team == "player":
             self.team_players.append(combatant)
         if team == "monster":
             self.team_monsters.append(combatant)
+    
+    def roll_initiative(self):
+        for hero in self.team_players:
+            initroll = D20_roll()
+            initroll += hero.initiative
+            hero.rolled_initiative = initroll
+            self.initiative_list.append(hero)
+        for monster in self.team_monsters:
+            initroll = D20_roll()
+            initroll += monster.initiative
+            monster.rolled_initiative = initroll
+            self.initiative_list.append(monster)
+        self.initiative_list.sort(reverse=True, key=initiativesort)
 
 
-
+def initiativesort(e):
+        return e.rolled_initiative
 
 class attackMove():
     def __init__(self,name,roll_or_spell,atkbonus,savedc,actcost,num_uses,other_cost,dmgtype,dmg,effects):
@@ -198,7 +214,8 @@ if __name__ == '__main__':
     gruglist = [GrugAtk1]
     Grugattacklist = attackList("Grug Attacks",gruglist)
     Grug = player("Grug",20,15,15,Grugattacklist,2,"burst","frontline","player",mydick,[],[],1,myBattlefield)
-    Wolf = player("Wolf",10,10,12,Grugattacklist,5,"burst","rogue","monster",mydick,[],[],0,myBattlefield)
+    Wolf = player("Wolf",5,10,12,Grugattacklist,5,"burst","rogue","monster",mydick,[],[],0,myBattlefield)
+    Wolf2 = player("Wolf2",5,10,12,Grugattacklist,5,"burst","rogue","monster",mydick,[],[],0,myBattlefield)
 
     #print(GrugAtk1)
     #print(Grugattacklist)
@@ -206,6 +223,21 @@ if __name__ == '__main__':
 
     myBattlefield.add_combatant(Grug,"player")
     myBattlefield.add_combatant(Wolf,"monster")
+    myBattlefield.add_combatant(Wolf2,"monster")
+    myBattlefield.roll_initiative()
+
+    someonedied = False
+    while not someonedied:
+        for combatanant in myBattlefield.initiative_list:
+            (target,attack) = combatanant.Select_target("random")
+            combatanant.Execute_attack(target,attack)
+            if(target.curr_hp <= 0):
+                someonedied = True
+                print(f"{target.name} died")
+                break
+
+
+"""
     Grug.Execute_attack(Wolf,GrugAtk1)
 
     (target,attack) = Grug.Select_target("random")
@@ -213,4 +245,4 @@ if __name__ == '__main__':
 
     (target,attack) = Wolf.Select_target("random")
     Wolf.Execute_attack(target,attack)
-
+"""
