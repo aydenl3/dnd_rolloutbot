@@ -60,15 +60,15 @@ class player():
         if target_strategy == "random":
             print(f"{self.name} randomly targeted:")
             if(self.team == "player"):
-                target_number = random.randint(1,len(self.battlefield.team_monsters))
-                target = self.battlefield.team_monsters[target_number-1]
+                target_number = random.randint(1,len(self.battlefield.team_monsters_alive))
+                target = self.battlefield.team_monsters_alive[target_number-1]
                 attack = self.Select_attack("random",target)
                 print(f"{target.name} with randomly chosen{attack.name}")
                 return(target,attack)
 
             elif(self.team == "monster"):
-                target_number = random.randint(1,len(self.battlefield.team_players))
-                target = self.battlefield.team_players[target_number-1]
+                target_number = random.randint(1,len(self.battlefield.team_players_alive))
+                target = self.battlefield.team_players_alive[target_number-1]
                 attack = self.Select_attack("random",target)
                 print(f"{target.name} with randomly chosen{attack.name}")
                 return(target,attack)

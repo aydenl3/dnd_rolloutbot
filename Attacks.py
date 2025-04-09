@@ -18,6 +18,7 @@ class attackList():
     def __init__(self,name,record):
         self.name = name
         self.record = record
+        self.nonrecord = []
     def __str__(self):
         curr_attack = ""
         for attack in self.record:
