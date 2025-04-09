@@ -1,6 +1,6 @@
 import random
-import player from Player.py
-
+import Player
+import Battlefield
 class attackMove():
     def __init__(self,name,roll_or_spell,atkbonus,savedc,actcost,num_uses,other_cost,dmgtype,dmg,effects):
         self.name = name
@@ -80,14 +80,14 @@ if __name__ == '__main__':
     mydick.update({"WIS": 2})
     mydick.update({"CHA": 0})
 
-    myBattlefield = battlefield()
+    myBattlefield = Battlefield.battlefield()
 
     GrugAtk1 = attackMove("Grug Punch","roll",3,None,"Action",None,None,"Bludgeoning","1d8",None)
     gruglist = [GrugAtk1]
     Grugattacklist = attackList("Grug Attacks",gruglist)
-    Grug = player("Grug",20,15,15,Grugattacklist,2,"burst","frontline","player",mydick,[],[],1,myBattlefield)
-    Wolf = player("Wolf",5,10,12,Grugattacklist,5,"burst","rogue","monster",mydick,[],[],0,myBattlefield)
-    Wolf2 = player("Wolf2",5,10,12,Grugattacklist,5,"burst","rogue","monster",mydick,[],[],0,myBattlefield)
+    Grug = Player.player("Grug",20,15,15,Grugattacklist,2,"burst","frontline","player",mydick,[],[],1,myBattlefield)
+    Wolf = Player.player("Wolf",5,10,12,Grugattacklist,5,"burst","rogue","monster",mydick,[],[],0,myBattlefield)
+    Wolf2 = Player.player("Wolf2",5,10,12,Grugattacklist,5,"burst","rogue","monster",mydick,[],[],0,myBattlefield)
 
     #print(GrugAtk1)
     #print(Grugattacklist)

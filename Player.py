@@ -1,3 +1,5 @@
+import main
+import random
 class player():
     def __init__(self,name,hp,currhp,ac,atklist,initiative,brain,role,team,stats,weaknesses,resistances,inspiration,battlefield):
         self.name = name                #string
@@ -29,9 +31,9 @@ class player():
         if(atk.roll_or_spell == "roll"):
             #roll attack
             print(f"{self.name} attacked {target.name} with {atk.name}")
-            if (Attack_roll(atk,target)):
+            if (main.Attack_roll(atk,target)):
                 #hit
-                damage_dealt = Damage_roll(atk,target)
+                damage_dealt = main.Damage_roll(atk,target)
                 target.Change_hp(damage_dealt*-1)
                 print(f"dealing {damage_dealt} damage!")
                 pass
