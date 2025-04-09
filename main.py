@@ -1,4 +1,5 @@
 import random
+import player.py
 
 class attackMove():
     def __init__(self,name,roll_or_spell,atkbonus,savedc,actcost,num_uses,other_cost,dmgtype,dmg,effects):
